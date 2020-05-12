@@ -6,7 +6,7 @@ import { isContext } from "vm";
 
 export class SampleDisplayComponent implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
-	private _value: string;
+	private _output: string;
 
 	private _container: HTMLDivElement;
 	private inputElement: HTMLInputElement;
@@ -38,37 +38,48 @@ export class SampleDisplayComponent implements ComponentFramework.StandardContro
 		this.componentDataChanged = this.componentDataChanged.bind(this);
 		this._container = container;
 
+		this._sampleComponentProps = {
+			label: context.parameters.componentLabel.raw == null ? "Please input your content" : context.parameters.componentLabel.raw,
+			defaultInputValue: context.parameters.defaultInputValue.raw == null ? "" : context.parameters.defaultInputValue.raw,
+			outputChanged: this.componentDataChanged
+		};
+
 		this.renderComponent(context);
 	}
 
 
 	/**
-	 * Called when any value in the property bag has changed. This includes field values, data-sets, global values such as container height and width, offline status, control metadata values such as label, visible, etc.
+	 * Called when any value in the property bag has changed. This includes field values, data-sets, \
+	 * lobal values such as container height and width, offline status, control metadata values such as label, visible, etc.
 	 * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
 	 */
 	public updateView(context: ComponentFramework.Context<IInputs>): void
 	{
-		console.log("Calling update view");
+		console.log("updateView called");
 		this.renderComponent(context);
 	}
 
+	/**
+	 * Encapsulates any logic for comparing/validating the properties to be passed to the component and returns the ISampleDisplayProps object
+	 * @param context 
+	 */
 	private getComponentProps(context: ComponentFramework.Context<IInputs>): ISampleDisplayProps {
 
 		let newProps:ISampleDisplayProps = this._sampleComponentProps;
+		
+		// if(context.updatedProperties.includes("defaultInputValue") && context.parameters.defaultInputValue.raw !== this._sampleComponentProps.defaultInputValue) {
+		// 	newProps.defaultInputValue = context.parameters.defaultInputValue.raw == null ? "" : context.parameters.defaultInputValue.raw;
+		// }
 
-		if(context.updatedProperties.includes("defaultInputValue") && context.parameters.defaultInputValue.raw !== this._sampleComponentProps.inputValue) {
-			newProps.inputValue = context.parameters.defaultInputValue.raw == null ? "" : context.parameters.defaultInputValue.raw;
-		}
-
-		let labelValue = context.parameters.componentLabel.raw == null ? "Please input your content" : context.parameters.componentLabel.raw;
-		let defaultInputValue = context.parameters.defaultInputValue.raw == null ? "" : context.parameters.defaultInputValue.raw;
-		return {
-			label: labelValue,
-			inputValue: defaultInputValue,
-			outputChanged: this.componentDataChanged
-		}
+		newProps.label = context.parameters.componentLabel.raw == null ? "Please input your content" : context.parameters.componentLabel.raw;
+		
+		return newProps;
 	}
 
+	/**
+	 * Encapsulates component rendering logic
+	 * @param context 
+	 */
 	private renderComponent(context: ComponentFramework.Context<IInputs>) {
 
 		this._sampleComponentProps = this.getComponentProps(context);
@@ -81,9 +92,13 @@ export class SampleDisplayComponent implements ComponentFramework.StandardContro
 		 	this._container
 		);
 	}
-
+	/**
+	 * Callback method so the React component can send output back to the Power Apps
+	 * @param data 
+	 */
 	public componentDataChanged(data:ISampleOutputProps) {
-		this._value = data.output1;
+		this._sampleComponentProps.defaultInputValue = data.output1;
+		this._output = data.output1;
 		this._notifyOutputChanged();
 	}
 
@@ -94,7 +109,7 @@ export class SampleDisplayComponent implements ComponentFramework.StandardContro
 	public getOutputs(): IOutputs
 	{
 		return {
-			componentOutput: this._value
+			componentOutput: this._output
 		};
 	}
 

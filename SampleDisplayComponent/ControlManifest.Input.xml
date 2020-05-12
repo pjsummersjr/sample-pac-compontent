@@ -4,7 +4,7 @@
     <!-- property node identifies a specific, configurable piece of data that the control expects from CDS -->
     <property name="componentLabel" display-name-key="Property_Display_Key" description-key="Property_Desc_Key" of-type="SingleLine.Text" usage="input" required="true" />
     <property name="defaultInputValue" display-name-key="Property_Display_Key" description-key="Property_Desc_Key" of-type="SingleLine.Text" usage="input" required="true" />
-    <property name="componentOutput" display-name-key="Output_Display_Key" description-key="Output_Display_Key" of-type="SingleLine.Text" usage="bound" />
+    <property name="componentOutput" display-name-key="Output_Display_Key" description-key="Output_Display_Key" of-type="SingleLine.Text" usage="output" />
     <!-- 
       Property node's of-type attribute can be of-type-group attribute. 
       Example:
