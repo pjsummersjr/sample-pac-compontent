@@ -1,0 +1,17 @@
+.component-container {
+    box-shadow: 3px 3px 3px 3px darkgrey;
+    border-radius: 5px;
+    margin: 5px 5px 5px 5px;
+    padding: 5px 5px 5px 5px;
+    font-family: 'Segoe UI';
+}
+
+.component-label {
+    text-align: left;
+    margin: 0px 0px 5px 7px;
+}
+
+.component-text-input {
+    border: solid 1px #000;
+    border-radius: 3px;
+}
