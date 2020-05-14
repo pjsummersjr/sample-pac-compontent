@@ -42,12 +42,11 @@ export default class SampleDisplayComponent extends React.Component<ISampleDispl
     }
 
     public render(): React.ReactElement {        
-        console.log("Rendering react component");
+        
         return (
-            <div>
-                <div>{this.state.currentLabel}</div>
-                <input type="text" value={this.state.currentValue} onChange={this.dataInputChanged}/>
-                <div>Something else</div>
+            <div className="component-container">
+                <div className="component-label">{this.state.currentLabel}</div>
+                <input className="component-text-input" type="text" value={this.state.currentValue} onChange={this.dataInputChanged}/>
             </div>
         );
     }
